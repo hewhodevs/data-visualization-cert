@@ -1,0 +1,62 @@
+<body>
+  <h1>Barchart Example</h1>
+  <div class="chartArea"></div>
+  <!-- CSS styles -->
+  <style>
+    .chartArea {
+      border: 1px solid black;
+      display: inline-block;
+      overflow: hidden;
+      resize: both;
+    }
+    .chart {
+      /*  display svg chart as block, to remove default bottom padding  */
+      display: block;
+    }
+    .bar:hover {
+      fill: blue;
+    }
+  </style>
+  <!-- D3 Chart Script -->
+  <script src="/node_modules/d3/dist/d3.js"></script>
+  <script>
+    // example dataset values
+    const dataset = [10, 44, 39, 85, 24, 34, 54, 18];
+
+    // declare height and width of chart
+    const barWidth = 30;
+    const barSpacing = 5;
+    const yScaleMultiple = 2;
+    const chartHeight = 250;
+    const chartWidth = dataset.length * 30 - barSpacing;
+
+    // create chart svg using d3.js
+    const svgChart = d3.select(".chartArea")
+                      .append("svg")
+                      .attr("class", "chart")
+                      .attr("width", chartWidth)
+                      .attr("height", chartHeight);
+
+    // Add rectangles per data item to the chart
+    // d3 creates the missing rectangle elements for us
+    svgChart.selectAll("rect")
+            .data(dataset)
+            .enter()
+            .append("rect")
+            .attr("x", (d, i) => i * 30)
+            .attr("y", (d, i) => chartHeight - yScaleMultiple * d)
+            .attr("width", 25)
+            .attr("height", (d, i) => d * yScaleMultiple)
+            .attr("fill", "navy")
+            .attr("class", "bar");
+
+    // Add text to the chart
+    svgChart.selectAll("text")
+          .data(dataset)
+          .enter()
+          .append("text")
+          .text((d) => d)
+          .attr("x", (d, i) => i * 30)
+          .attr("y", (d, i) => chartHeight - (d * yScaleMultiple + 3))
+  </script>
+</body>
